@@ -32,11 +32,76 @@ public class ThreadPoolManager {
         return instance;
     }
 
+    public static ThreadPoolManager getInstance() {
+        if (instance == null) {
+            synchronized (ThreadPoolManager.class) {
+                if (instance == null) {
+                    instance = new ThreadPoolManager();
+                }
+            }
+        }
+        return instance;
+    }
+
     public void addTask(Runnable task) {
         try {
             blockingTaskQueue.put(task);
+            // Process the task from the queue
+            processNextTask();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            System.err.println("Thread was interrupted while adding task");
         }
-   }
+    }
+
+    private void processNextTask() {
+        if (!blockingTaskQueue.isEmpty()) {
+            Runnable task = blockingTaskQueue.poll();
+            if (task != null) {
+                threadPool.submit(task);
+            }
+        }
+    }
+
+    public void executeTask(Runnable task) {
+        threadPool.submit(task);
+    }
+
+    public int getThreadCount() {
+        return threadCount;
+    }
+
+    public int getQueueSize() {
+        return blockingTaskQueue.size();
+    }
+
+    public boolean isShutdown() {
+        return threadPool.isShutdown();
+    }
+
+    public void shutdown() {
+        threadPool.shutdown();
+        System.out.println("ThreadPoolManager shutdown initiated");
+    }
+
+    public void shutdownNow() {
+        threadPool.shutdownNow();
+        blockingTaskQueue.clear();
+        System.out.println("ThreadPoolManager force shutdown completed");
+    }
+
+    // Prevent cloning
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException("Singleton instance cannot be cloned");
+    }
+
+    // Information method
+    public void printStatus() {
+        System.out.println("ThreadPoolManager Status:");
+        System.out.println("  Thread Count: " + threadCount);
+        System.out.println("  Queue Size: " + blockingTaskQueue.size());
+        System.out.println("  Is Shutdown: " + threadPool.isShutdown());
+        System.out.println("  Instance Hash: " + this.hashCode());
+    }
 }
