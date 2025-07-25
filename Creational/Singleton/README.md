@@ -54,7 +54,7 @@ A practical implementation of the Singleton pattern for managing a thread pool:
 ✅ **Controlled Access**: Only one instance exists throughout the application lifecycle  
 ✅ **Global Access Point**: Easy access from anywhere in the application  
 ✅ **Lazy Initialization**: Instance created only when needed  
-✅ **Thread Safety**: Safe to use in multi-threaded environments  
+✅ **Thread Safety**: Safe to use in multithreaded environments  
 ✅ **Memory Efficiency**: Reduces memory footprint by avoiding multiple instances  
 
 ## Use Cases

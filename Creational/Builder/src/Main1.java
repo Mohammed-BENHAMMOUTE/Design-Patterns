@@ -11,7 +11,7 @@ import model.*;
  * 4. Director Pattern - Uses concrete builders to create standardized objects
  * 5. Polymorphism - Director can work with different builder implementations
  */
-public class Main {
+public class Main1 {
     public static void main(String[] args) {
         System.out.println("=== Builder Design Pattern with Interface Demo ===\n");
 
@@ -129,7 +129,7 @@ public class Main {
 
         try {
             // This will fail - no name provided
-            ((BasicPlayerBuilder) new BasicPlayerBuilder()).build();
+             new BasicPlayerBuilder().build();
         } catch (IllegalStateException e) {
             System.out.println("✓ Basic Builder validation caught: " + e.getMessage());
         }
